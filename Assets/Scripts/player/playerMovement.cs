@@ -39,6 +39,8 @@ public class playerMovement : MonoBehaviour
 
     [Header("Animation Related stuffs")]
     public Animator animator;
+
+    //ignore these stuffs
     public float m_ForwardAmount;
     public float m_TurnAmount;
     public float m_JumpAmount;
@@ -67,8 +69,10 @@ public class playerMovement : MonoBehaviour
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
 
+
         Vector2 inputDir = input.normalized;
-        
+
+        //Debug.Log(inputDir);
 
         if (inputDir != Vector2.zero)
         {
@@ -79,12 +83,8 @@ public class playerMovement : MonoBehaviour
 
             transform.eulerAngles = Vector2.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, Rotation, ref currentVelocity, RotationSmoothingSpeed);
 
-            //akkaAnimator.SetBool("isRunning", true);
         }
-        else
-        {
-            //akkaAnimator.SetBool("isRunning", false);
-        }
+
         float targetSpeed = PlayerMoveSpeed * inputDir.magnitude;
 
         if (characterController.isGrounded)
@@ -112,11 +112,11 @@ public class playerMovement : MonoBehaviour
 
 
         moveDir = transform.forward * currentSpeed * Time.deltaTime;
-        moveDir += Vector3.up * -9.8f * Time.deltaTime;
 
-        //moveDir.y -= gravity * Time.deltaTime;
-        GravityChecker();
+        //gravity
+        moveDir += Vector3.up * gravity * Time.deltaTime;
 
+        //forward animation value
         m_ForwardAmount =  currentSpeed * 0.5f;
 
         characterController.Move(moveDir);
@@ -129,7 +129,7 @@ public class playerMovement : MonoBehaviour
 
         m_TurnAmount = ((RotationTurn - (-1)) / (1 - (-1)) * 100f / -10/100f ) * -1/1; 
 
-        Debug.Log(m_TurnAmount);
+        //Debug.Log(m_TurnAmount);
 
         //transform.Translate(transform.forward * currentSpeed * Time.deltaTime, Space.World);
         //PlayerRigidbody.velocity = transform.forward*currentSpeed;
@@ -150,12 +150,6 @@ public class playerMovement : MonoBehaviour
 
 
 
-    public void GravityChecker()
-    {
-        if (characterController.isGrounded)
-        {
-        }
 
-    }
 
 }

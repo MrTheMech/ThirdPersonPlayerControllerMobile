@@ -21,6 +21,7 @@ public class cameraFollow : MonoBehaviour
     float RotY; //Reference Float - Player Input Y
     Vector3 CurrentVelocity; //Reference Float for Camera Temp Velocity
     Vector3 targetRotation; //Reference Float for Camera Movement
+
     [SerializeField]
     bool isMobile; //Gets Mobile or PC from editor
 
@@ -29,11 +30,11 @@ public class cameraFollow : MonoBehaviour
 
     [Tooltip("Minimum Clamp Camera (Camera Bounds X axis)")]
     [SerializeField]
-    private float MinCameraRotationClamp = -40f;
+    private float MinCameraRotationClamp = -60f;
 
     [Tooltip("Minimum Clamp Camera (Camera Bounds X axis)")]
     [SerializeField]
-    private float MaxCameraRotationClamp = 80f;
+    private float MaxCameraRotationClamp = 60f;
 
     [Tooltip("The Target Where the Camera Should Rotate Around")]
     public Transform target;
@@ -51,7 +52,6 @@ public class cameraFollow : MonoBehaviour
         getPlayerInput();
         cameraClamp();
         cameraRotation();
-        cameraCollision();
     }
 
     private void Update()
@@ -88,9 +88,5 @@ public class cameraFollow : MonoBehaviour
     }
 
 
-    public void cameraCollision()
-    {
-
-    }
 
 }

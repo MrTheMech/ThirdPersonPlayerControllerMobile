@@ -7,7 +7,11 @@ public class CameraCollision : MonoBehaviour
     public float minDistance = 1.0f;
     public float maxDistance = 4.0f;
     public float smooth = 10f;
+
+    //reference value
     Vector3 dollyDir;
+
+    //debugging purpose public
     public float distance;
 
     //use this for initialization
@@ -20,6 +24,7 @@ public class CameraCollision : MonoBehaviour
 
     private void Update()
     {
+
         Vector3 desiredCamPos = transform.parent.TransformPoint(dollyDir * maxDistance);
         RaycastHit hit;
 
