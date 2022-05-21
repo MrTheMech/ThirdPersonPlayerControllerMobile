@@ -26,7 +26,7 @@ public class playerMovement : MonoBehaviour
     float speedVelocity;
     Transform cameraTransform;
 
-    public float gravity = -9.81f;
+    private float gravity = -9.81f;
     public float groundedGravity = -0.5f;
 
     public FloatingJoystick joystick;
@@ -87,20 +87,7 @@ public class playerMovement : MonoBehaviour
 
         float targetSpeed = PlayerMoveSpeed * inputDir.magnitude;
 
-        if (characterController.isGrounded)
-        {
-            m_IsGrounded = true;
 
-
-
-        }
-        else
-        {
-
-            m_IsGrounded = false;
-
-
-        }
 
 
 
@@ -114,7 +101,17 @@ public class playerMovement : MonoBehaviour
         moveDir = transform.forward * currentSpeed * Time.deltaTime;
 
         //gravity
-        moveDir += Vector3.up * gravity * Time.deltaTime;
+        moveDir += Vector3.up * gravity * 2f * Time.deltaTime;
+        if (!characterController.isGrounded)
+        {
+            
+            gravity -= 9.81f * Time.deltaTime;
+            m_JumpAmount = 2.5f;
+        }
+        else
+        {
+            gravity = 0;
+        }
 
         //forward animation value
         m_ForwardAmount =  currentSpeed * 0.5f;
@@ -140,7 +137,7 @@ public class playerMovement : MonoBehaviour
     {
         animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
         animator.SetFloat("Turn", m_TurnAmount, 0.1f, Time.deltaTime);
-        animator.SetFloat("Jump", m_JumpAmount);
+        animator.SetFloat("Jump", m_JumpAmount, 0.1f,Time.deltaTime);
         animator.SetFloat("JumpLeg", m_JumpLeg);
         animator.SetBool("Crouch", m_Crouching);
         animator.SetBool("OnGround", m_IsGrounded);
