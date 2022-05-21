@@ -40,18 +40,20 @@ public class playerGravity : MonoBehaviour
     private void Update()
     {
 
-        
-
-
-
-        if (fixedButton.Pressed)
+        if (jumpCooldown >= 0f)
         {
-            if(Time.time > jumpCooldown)
-            {
-                jumpCooldown = Time.time + 1f;
-            }
-            gravity = jumpSpeed;
+            jumpCooldown -= Time.deltaTime;
         }
+        if(jumpCooldown < 0f)
+        {
+            if (fixedButton.Pressed)
+            {
+                Jump();
+            }
+        }
+
+
+
 
 
         if (isGrounded)
@@ -67,7 +69,12 @@ public class playerGravity : MonoBehaviour
             
     }
 
+    public void Jump()
+    {
+        playerMovement.gravity = 5f;
+        jumpCooldown = 1f;
 
+    }
 
     private void FixedUpdate()
     {

@@ -26,7 +26,7 @@ public class playerMovement : MonoBehaviour
     float speedVelocity;
     Transform cameraTransform;
 
-    private float gravity = -9.81f;
+    public float gravity = -9.81f;
     public float groundedGravity = -0.5f;
 
     public FloatingJoystick joystick;
@@ -97,11 +97,11 @@ public class playerMovement : MonoBehaviour
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, 0.1f);
 
 
-
-        moveDir = transform.forward * currentSpeed * Time.deltaTime;
+        Vector3 moveDirPlayerRotation;
+        moveDirPlayerRotation = transform.forward * currentSpeed * Time.deltaTime;
 
         //gravity
-        moveDir += Vector3.up * gravity * 2f * Time.deltaTime;
+        moveDir += Vector3.up * gravity  * Time.deltaTime;
         if (!characterController.isGrounded)
         {
             
@@ -116,7 +116,7 @@ public class playerMovement : MonoBehaviour
         //forward animation value
         m_ForwardAmount =  currentSpeed * 0.5f;
 
-        characterController.Move(moveDir);
+        characterController.Move(moveDir + moveDirPlayerRotation);
         animationUpdate();
 
 
