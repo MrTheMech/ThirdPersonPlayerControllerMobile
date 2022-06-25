@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerGravity : MonoBehaviour
+public class playerGravityCheck : MonoBehaviour
 {
     //references
     CharacterController characterController;
@@ -40,22 +40,6 @@ public class playerGravity : MonoBehaviour
     private void Update()
     {
 
-        if (jumpCooldown >= 0f)
-        {
-            jumpCooldown -= Time.deltaTime;
-        }
-        if(jumpCooldown < 0f)
-        {
-            if (fixedButton.Pressed)
-            {
-                Jump();
-            }
-        }
-
-
-
-
-
         if (isGrounded)
         {
             playerMovement.m_IsGrounded = true;
@@ -64,17 +48,10 @@ public class playerGravity : MonoBehaviour
         {
             playerMovement.m_IsGrounded = false;
         }
-
-
-            
+      
     }
 
-    public void Jump()
-    {
-        playerMovement.gravity = 5f;
-        jumpCooldown = 1f;
 
-    }
 
     private void FixedUpdate()
     {

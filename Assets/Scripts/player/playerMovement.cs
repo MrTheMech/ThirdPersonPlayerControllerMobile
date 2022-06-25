@@ -17,6 +17,9 @@ public class playerMovement : MonoBehaviour
     [Tooltip("Specify The Speed Required for Player to Move")]
     public float PlayerMoveSpeed;
 
+    [Tooltip("Jumping Boolean upon Timer")]
+    public bool isJumping;
+
     //[Tooltip("Player's Rigidbody To apply Motion")]
     //public Rigidbody PlayerRigidbody;
     public CharacterController characterController;
@@ -25,6 +28,7 @@ public class playerMovement : MonoBehaviour
     float currentSpeed;
     float speedVelocity;
     Transform cameraTransform;
+    FixedButton JumpButton;
 
     public float gravity = -9.81f;
     public float groundedGravity = -0.5f;
@@ -51,7 +55,7 @@ public class playerMovement : MonoBehaviour
     private void Awake()
     {
         cameraTransform = Camera.main.transform;
-
+        JumpButton = GameObject.FindObjectOfType<FixedButton>();
     }
 
     void Update()
@@ -68,6 +72,7 @@ public class playerMovement : MonoBehaviour
         {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
+
 
 
         Vector2 inputDir = input.normalized;
@@ -96,27 +101,25 @@ public class playerMovement : MonoBehaviour
 
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, 0.1f);
 
+        //Movement
+        moveDir = transform.forward * currentSpeed * Time.deltaTime;
 
-        Vector3 moveDirPlayerRotation;
-        moveDirPlayerRotation = transform.forward * currentSpeed * Time.deltaTime;
-
-        //gravity
-        moveDir += Vector3.up * gravity  * Time.deltaTime;
-        if (!characterController.isGrounded)
+        //gravity and jump
+        if (JumpButton.Pressed)
         {
-            
-            gravity -= 9.81f * Time.deltaTime;
-            m_JumpAmount = 2.5f;
+            Jump();
         }
         else
         {
-            gravity = 0;
+            Gravity();
         }
+        
+
 
         //forward animation value
         m_ForwardAmount =  currentSpeed * 0.5f;
 
-        characterController.Move(moveDir + moveDirPlayerRotation);
+        characterController.Move(moveDir);
         animationUpdate();
 
 
@@ -132,6 +135,15 @@ public class playerMovement : MonoBehaviour
         //PlayerRigidbody.velocity = transform.forward*currentSpeed;
     }
 
+
+    public void Jump()
+    {
+        moveDir.y += 5f * Time.deltaTime;
+    }
+    public void Gravity()
+    {
+        moveDir.y -= 9.81f * Time.deltaTime;
+    }
 
     public void animationUpdate()
     {
