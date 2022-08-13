@@ -39,15 +39,16 @@ public class playerGravityCheck : MonoBehaviour
 
     private void Update()
     {
-
+        
         if (isGrounded)
         {
             playerMovement.m_IsGrounded = true;
         }
         else
         {
-            playerMovement.m_IsGrounded = false;
+            playerMovement.m_IsGrounded = true;
         }
+        
       
     }
 

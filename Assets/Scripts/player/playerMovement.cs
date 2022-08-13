@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
-    [Tooltip("Akka's Animation Controller")]
-    public Animator akkaAnimator;
+
 
     [Tooltip("If The Scene is set to global check this boolean")] 
     public bool isGlobal;
@@ -20,6 +19,12 @@ public class playerMovement : MonoBehaviour
     [Tooltip("Jumping Boolean upon Timer")]
     public bool isJumping;
 
+    public bool canJump;
+
+    public float jumpTimer;
+    public float jumpSpeed;
+    public float ySpeed;
+
     //[Tooltip("Player's Rigidbody To apply Motion")]
     //public Rigidbody PlayerRigidbody;
     public CharacterController characterController;
@@ -29,6 +34,7 @@ public class playerMovement : MonoBehaviour
     float speedVelocity;
     Transform cameraTransform;
     FixedButton JumpButton;
+    playerGravityCheck playerGravityCheck;
 
     public float gravity = -9.81f;
     public float groundedGravity = -0.5f;
@@ -56,6 +62,7 @@ public class playerMovement : MonoBehaviour
     {
         cameraTransform = Camera.main.transform;
         JumpButton = GameObject.FindObjectOfType<FixedButton>();
+        playerGravityCheck = gameObject.GetComponent<playerGravityCheck>();
     }
 
     void Update()
@@ -101,19 +108,25 @@ public class playerMovement : MonoBehaviour
 
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, 0.1f);
 
+
+
         //Movement
         moveDir = transform.forward * currentSpeed * Time.deltaTime;
 
         //gravity and jump
-        if (JumpButton.Pressed)
+        if (characterController.isGrounded)
         {
-            Jump();
+            ySpeed = -3f;
+            if (JumpButton.Pressed)
+            {
+                Jump();
+            }
         }
-        else
-        {
-            Gravity();
-        }
-        
+
+
+
+        ySpeed += Physics.gravity.y * Time.deltaTime;
+        Gravity();
 
 
         //forward animation value
@@ -138,11 +151,15 @@ public class playerMovement : MonoBehaviour
 
     public void Jump()
     {
-        moveDir.y += 5f * Time.deltaTime;
+        //moveDir.y += 5f * Time.deltaTime;
+        //moveDir.y += 8f * Time.deltaTime;
+        ySpeed = jumpSpeed;
+
+
     }
     public void Gravity()
     {
-        moveDir.y -= 9.81f * Time.deltaTime;
+        moveDir.y = ySpeed * Time.deltaTime;
     }
 
     public void animationUpdate()
